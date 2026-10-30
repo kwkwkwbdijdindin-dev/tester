@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Miko Api Tech - CDI Programmable</title>
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--fs:17px;--lh:1.7;--ff:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{font-size:var(--fs);line-height:var(--lh);font-family:var(--ff);background:var(--bg);color:var(--tx);transition:background .3s,color .3s}
+body[data-t="pink"]{--bg:#fff3f7;--card:#ffffff;--tx:#3a0a1a;--mut:#7a4358;--a:#e0245e;--b:#c1121f;--ln:#f4b9cc;--ok:#1b7f4b;--warn:#b45309;--bad:#c1121f}
+body[data-t="gahar"]{--bg:#0d0306;--card:#1b060b;--tx:#fbeaee;--mut:#d9a3af;--a:#ff2a4a;--b:#ff7a1a;--ln:#5b1220;--ok:#4ade80;--warn:#fbbf24;--bad:#ff4d6a}
+.w{max-width:960px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 0 4px}
+.logo{font-weight:800;font-size:1.3em;color:var(--a)}
+.seg button{font:inherit;background:transparent;color:var(--tx);border:2px solid var(--a);padding:6px 16px;cursor:pointer}
+.seg button:first-child{border-radius:99px 0 0 99px}.seg button:last-child{border-radius:0 99px 99px 0;border-left:0}
+.seg button.on{background:linear-gradient(135deg,var(--a),var(--b));color:#fff;border-color:transparent}
+.hero{padding:26px 0 8px}
+h1{font-size:clamp(1.9em,7vw,2.8em);line-height:1.15;color:var(--a)}
+.hero p{color:var(--mut);max-width:620px;margin-top:8px}
+section{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:18px;margin-top:16px}
+h2{font-size:1.2em;color:var(--a);margin-bottom:4px}
+.hint{color:var(--mut);font-size:.9em;margin-bottom:12px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+label{display:block;font-weight:600;margin-top:10px}
+label small{font-weight:400;color:var(--mut)}
+.v{float:right;color:var(--b);font-weight:700}
+input[type=range]{width:100%;accent-color:var(--a)}
+select,input[type=number],textarea{font:inherit;width:100%;padding:8px;border-radius:8px;border:1px solid var(--ln);background:var(--bg);color:var(--tx)}
+.chk{display:flex;gap:8px;align-items:center;font-weight:600;margin-top:12px;cursor:pointer}
+.chk input{width:20px;height:20px;accent-color:var(--a)}
+.btn{font:inherit;font-weight:700;background:linear-gradient(135deg,var(--a),var(--b));color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer}
+.btn.o{background:transparent;color:var(--a);border:2px solid var(--a)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0}
+.stat div{background:var(--bg);border:1px solid var(--ln);border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-size:1.5em;color:var(--b)}
+.stat small{color:var(--mut)}
+.bar{position:relative;height:30px;background:var(--bg);border:2px solid var(--ln);border-radius:8px;overflow:hidden;margin-top:8px}
+.bar.flash{border-color:var(--b);box-shadow:0 0 18px var(--b)}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
+.mk{position:absolute;top:0;bottom:0;width:3px}
+.scale{display:flex;justify-content:space-between;color:var(--mut);font-size:.8em;margin-top:2px}
+.gas{width:100%;padding:18px;font-size:1.1em;touch-action:none;user-select:none;-webkit-user-select:none}
+#st{font-weight:800}
+.tw{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;min-width:460px}
+th,td{border-bottom:1px solid var(--ln);padding:6px;text-align:center}
+th{color:var(--a);font-size:.9em}
+td input{width:80px;text-align:center}
+ul{list-style:none;padding:0;margin-top:8px;max-height:220px;overflow:auto}
+li{padding:6px 0;border-bottom:1px dashed var(--ln);color:var(--mut)}
+li b{color:var(--b)}
+svg{width:100%;height:auto;display:block;margin-top:10px}
+footer{text-align:center;color:var(--mut);padding:26px 0;font-size:.85em}
+</style>
+</head>
+<body data-t="pink">
+<div class="w">
+
+<header>
+  <div class="logo">Miko Api Tech</div>
+  <div class="seg">
+    <button id="tp" class="on" onclick="setTheme('pink')">Tema Pink</button><button id="tg" onclick="setTheme('gahar')">Tema Gahar</button>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>CDI Programmable</h1>
+  <p>Simulasi pengapian lengkap: kurva timing yang bisa diubah, limiter RPM custom, dan backfire. Semua pengaturan bisa disimpan dan disalin.</p>
+</div>
+
+<section>
+  <h2>Simulator Mesin</h2>
+  <p class="hint">Tahan tombol Gas untuk menaikkan putaran, lepas untuk menurunkan. Di perangkat sentuh, gunakan Kunci gas jika perlu.</p>
+  <div class="stat">
+    <div><b id="oR">1.400</b><small>RPM</small></div>
+    <div><b id="oT">0</b><small>Timing (derajat)</small></div>
+    <div><b id="oD">0</b><small>Jeda (µs)</small></div>
+    <div><b id="st">Normal</b><small>Status limiter</small></div>
+  </div>
+  <div class="bar" id="bar"><div class="fill" id="fill"></div><div class="mk" id="mL" style="background:#ff2a4a"></div><div class="mk" id="mB" style="background:#f59e0b"></div></div>
+  <div class="scale"><span>0</span><span>7.000</span><span>14.000</span></div>
+  <p class="hint" style="margin-top:6px">Garis merah: batas limiter. Garis kuning: awal backfire.</p>
+  <button class="btn gas" id="gas">Tahan untuk Gas</button>
+  <label class="chk"><input type="checkbox" id="lock"> Kunci gas (tanpa menahan)</label>
+</section>
+
+<section>
+  <h2>Limiter RPM Custom</h2>
+  <p class="hint">Atur batas putaran dan cara pemotongan pengapian.</p>
+  <div class="row">
+    <div>
+      <label for="lim">Batas RPM <span class="v" id="vL"></span></label>
+      <input type="range" id="lim" min="6000" max="14000" step="100">
+      <label for="lmode">Mode limiter</label>
+      <select id="lmode">
+        <option value="hard">Hard cut (potong total)</option>
+        <option value="soft">Soft (mundurkan timing bertahap)</option>
+        <option value="partial">Cut bertahap (sebagian siklus)</option>
+      </select>
+    </div>
+    <div>
+      <label for="hyst">Histeresis <small>(hard cut)</small> <span class="v" id="vH"></span></label>
+      <input type="range" id="hyst" min="100" max="1000" step="50">
+      <label for="cut">Persentase cut <small>(mode bertahap)</small> <span class="v" id="vC"></span></label>
+      <input type="range" id="cut" min="10" max="100" step="5">
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Backfire</h2>
+  <p class="hint">Letusan muncul saat gas dilepas di atas RPM tertentu. Bisa juga muncul ketika limiter memotong.</p>
+  <label class="chk"><input type="checkbox" id="bf"> Aktifkan backfire</label>
+  <div class="row">
+    <div>
+      <label for="bfs">RPM awal backfire <span class="v" id="vBS"></span></label>
+      <input type="range" id="bfs" min="2000" max="12000" step="500">
+    </div>
+    <div>
+      <label for="bfi">Intensitas (peluang per detik) <span class="v" id="vBI"></span></label>
+      <input type="range" id="bfi" min="5" max="100" step="5">
+    </div>
+  </div>
+  <label class="chk"><input type="checkbox" id="bfl"> Backfire saat limiter memotong</label>
+  <label class="chk"><input type="checkbox" id="snd"> Suara letusan</label>
+  <ul id="log"><li>Belum ada kejadian.</li></ul>
+</section>
+
+<section>
+  <h2>Kurva Timing</h2>
+  <p class="hint">Ubah derajat pengapian (BTDC) di setiap titik RPM. Nilai di antara titik dihitung otomatis.</p>
+  <svg id="ch" viewBox="0 0 600 250"></svg>
+  <div class="btns">
+    <button class="btn o" onclick="preset(26)">Preset harian</button>
+    <button class="btn o" onclick="preset(30)">Preset standar</button>
+    <button class="btn o" onclick="preset(35)">Preset balap</button>
+    <button class="btn o" onclick="shift(1)">Semua +1</button>
+    <button class="btn o" onclick="shift(-1)">Semua -1</button>
+  </div>
+  <div class="tw"><table id="tb"></table></div>
+</section>
+
+<section>
+  <h2>Simpan dan Salin Pengaturan</h2>
+  <textarea id="ex" rows="9" readonly></textarea>
+  <div class="btns">
+    <button class="btn" onclick="copyEx()">Salin teks</button>
+    <button class="btn o" onclick="saveS()">Simpan di perangkat</button>
+    <button class="btn o" onclick="loadS()">Muat simpanan</button>
+  </div>
+  <p class="hint" id="msg" style="margin-top:8px"></p>
+</section>
+
+<section>
+  <h2>Tampilan Teks</h2>
+  <p class="hint">Atur supaya nyaman dibaca.</p>
+  <div class="row">
+    <div>
+      <label for="fs">Ukuran huruf <span class="v" id="vF"></span></label>
+      <input type="range" id="fs" min="14" max="24" step="1">
+    </div>
+    <div>
+      <label for="ff">Jenis huruf</label>
+      <select id="ff">
+        <option value="sans">Sans-serif (modern)</option>
+        <option value="serif">Serif (buku)</option>
+        <option value="mono">Monospace (teknis)</option>
+      </select>
+    </div>
+    <div>
+      <label for="lh">Jarak antar baris</label>
+      <select id="lh">
+        <option value="1.4">Rapat</option>
+        <option value="1.7">Normal</option>
+        <option value="2">Lega</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<footer>Miko Api Tech. Simulasi untuk belajar, bukan pengganti penyetelan di dyno.</footer>
+</div>
+
+<script>
+var $=function(i){return document.getElementById(i)};
+var BANDS=[];for(var i=1000;i<=14000;i+=1000)BANDS.push(i);
+function baseCurve(m){return BANDS.map(function(r){var b=10,t=Math.min(1,Math.max(0,(r-2000)/7000)),s=t*t*(3-2*t),a=b+(m-b)*s;if(r>11000)a-=(r-11000)/3000*4;return Math.round(Math.max(5,a)*2)/2})}
+var S={pts:baseCurve(30),limit:11000,lmode:'hard',cut:50,hyst:300,bf:true,bfs:5000,bfi:30,bfl:true,snd:false,theme:'pink',fs:17,ff:'sans',lh:1.7};
+var rpm=1400,thr=false,cutOn=false,logs=[],AC;
+var FF={sans:'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',serif:'Georgia,"Times New Roman",serif',mono:'ui-monospace,Consolas,Menlo,monospace'};
+var fmt=function(n){return Math.round(n).toLocaleString('id-ID')};
+
+function timing(r){var x=(Math.min(14000,Math.max(1000,r))-1000)/1000,i=Math.floor(x),f=x-i;if(i>=13)return S.pts[13];return S.pts[i]*(1-f)+S.pts[i+1]*f}
+
+/* ---------- Tampilan ---------- */
+function setTheme(t){S.theme=t;document.body.dataset.t=t;$('tp').classList.toggle('on',t==='pink');$('tg').classList.toggle('on',t==='gahar');drawChart()}
+function applyText(){var r=document.documentElement.style;r.setProperty('--fs',S.fs+'px');r.setProperty('--lh',S.lh);r.setProperty('--ff',FF[S.ff]);$('vF').textContent=S.fs+' px'}
+
+/* ---------- Sinkron kontrol ---------- */
+function sync(){
+  $('lim').value=S.limit;$('lmode').value=S.lmode;$('cut').value=S.cut;$('hyst').value=S.hyst;
+  $('bf').checked=S.bf;$('bfs').value=S.bfs;$('bfi').value=S.bfi;$('bfl').checked=S.bfl;$('snd').checked=S.snd;
+  $('fs').value=S.fs;$('ff').value=S.ff;$('lh').value=String(S.lh);
+  labels();applyText();setTheme(S.theme);buildTable();drawChart();exportText();
+}
+function labels(){
+  $('vL').textContent=fmt(S.limit)+' rpm';$('vH').textContent=S.hyst+' rpm';$('vC').textContent=S.cut+'%';
+  $('vBS').textContent=fmt(S.bfs)+' rpm';$('vBI').textContent=S.bfi+'%';
+  $('mL').style.left=(S.limit/14000*100)+'%';$('mB').style.left=(S.bfs/14000*100)+'%';
+}
+function bind(id,key,num,evt){$(id)[evt||'oninput']=function(){var e=$(id);S[key]=e.type==='checkbox'?e.checked:(num?+e.value:e.value);labels();applyText();exportText();drawChart()}}
+bind('lim','limit',1);bind('lmode','lmode');bind('cut','cut',1);bind('hyst','hyst',1);
+bind('bf','bf',0,'onchange');bind('bfs','bfs',1);bind('bfi','bfi',1);bind('bfl','bfl',0,'onchange');bind('snd','snd',0,'onchange');
+bind('fs','fs',1);bind('ff','ff',0,'onchange');bind('lh','lh',1,'onchange');
+
+/* ---------- Tabel dan kurva ---------- */
+function buildTable(){
+  var h='<tr><th>RPM</th>'+BANDS.map(function(r){return '<th>'+fmt(r)+'</th>'}).join('')+'</tr><tr><td>Derajat</td>';
+  S.pts.forEach(function(v,i){h+='<td><input type="number" min="0" max="45" step="0.5" value="'+v+'" data-i="'+i+'" aria-label="Derajat pada '+BANDS[i]+' rpm"></td>'});
+  $('tb').innerHTML=h+'</tr>';
+  var ins=$('tb').querySelectorAll('input');
+  for(var k=0;k<ins.length;k++)ins[k].oninput=function(){var v=parseFloat(this.value);if(isNaN(v))return;S.pts[+this.dataset.i]=Math.max(0,Math.min(45,v));drawChart();exportText()};
+}
+function preset(m){S.pts=baseCurve(m);buildTable();drawChart();exportText()}
+function shift(d){S.pts=S.pts.map(function(v){return Math.max(0,Math.min(45,v+d))});buildTable();drawChart();exportText()}
+function drawChart(){
+  var cs=getComputedStyle(document.body),A=cs.getPropertyValue('--a'),B=cs.getPropertyValue('--b'),L=cs.getPropertyValue('--ln'),M=cs.getPropertyValue('--mut');
+  var X=function(r){return 44+(r-1000)/13000*540},Y=function(a){return 215-a/45*200};
+  var s='<rect x="44" y="15" width="540" height="200" fill="none" stroke="'+L+'"/>';
+  for(var g=0;g<=45;g+=15)s+='<text x="38" y="'+(Y(g)+4)+'" text-anchor="end" font-size="11" fill="'+M+'">'+g+'°</text><line x1="44" x2="584" y1="'+Y(g)+'" y2="'+Y(g)+'" stroke="'+L+'" stroke-dasharray="3 4"/>';
+  var d=S.pts.map(function(v,i){return (i?'L':'M')+X(BANDS[i])+' '+Y(v)}).join('');
+  s+='<path d="'+d+'" fill="none" stroke="'+A+'" stroke-width="4" stroke-linejoin="round"/>';
+  S.pts.forEach(function(v,i){s+='<circle cx="'+X(BANDS[i])+'" cy="'+Y(v)+'" r="4" fill="'+B+'"/>'});
+  s+='<line x1="'+X(S.limit)+'" x2="'+X(S.limit)+'" y1="15" y2="215" stroke="#ff2a4a" stroke-width="2"/><text x="'+X(S.limit)+'" y="11" text-anchor="middle" font-size="11" fill="#ff2a4a">Limiter</text>';
+  if(S.bf)s+='<line x1="'+X(S.bfs)+'" x2="'+X(S.bfs)+'" y1="15" y2="215" stroke="#f59e0b" stroke-dasharray="5 4"/>';
+  for(var k=2000;k<=14000;k+=2000)s+='<text x="'+X(k)+'" y="235" text-anchor="middle" font-size="11" fill="'+M+'">'+k/1000+'k</text>';
+  s+='<circle cx="'+X(Math.min(14000,Math.max(1000,rpm)))+'" cy="'+Y(timing(rpm))+'" r="8" fill="'+B+'" stroke="#fff" stroke-width="3"/>';
+  $('ch').innerHTML=s;
+}
+
+/* ---------- Ekspor ---------- */
+function exportText(){
+  var t='MIKO API TECH - PENGATURAN CDI\n';
+  t+='Limiter: '+fmt(S.limit)+' rpm, mode '+({hard:'hard cut',soft:'soft',partial:'cut bertahap '+S.cut+'%'})[S.lmode]+(S.lmode==='hard'?', histeresis '+S.hyst+' rpm':'')+'\n';
+  t+='Backfire: '+(S.bf?'aktif, mulai '+fmt(S.bfs)+' rpm, intensitas '+S.bfi+'%, saat limiter '+(S.bfl?'ya':'tidak'):'mati')+'\n\nKurva timing (RPM : derajat BTDC)\n';
+  S.pts.forEach(function(v,i){t+=fmt(BANDS[i])+' : '+v+'\n'});
+  $('ex').value=t;
+}
+function msg(t){$('msg').textContent=t}
+function copyEx(){var e=$('ex');e.select();try{if(navigator.clipboard)navigator.clipboard.writeText(e.value);else document.execCommand('copy');msg('Teks disalin.')}catch(x){msg('Salin manual: tekan dan tahan teks lalu pilih Salin.')}}
+function saveS(){try{localStorage.setItem('mikoApiTech',JSON.stringify(S));msg('Pengaturan disimpan di perangkat ini.')}catch(e){msg('Penyimpanan tidak tersedia di browser ini.')}}
+function loadS(){try{var d=localStorage.getItem('mikoApiTech');if(!d){msg('Belum ada simpanan.');return}var o=JSON.parse(d);for(var k in o)S[k]=o[k];sync();msg('Pengaturan dimuat.')}catch(e){msg('Gagal memuat simpanan.')}}
+
+/* ---------- Backfire ---------- */
+function pop(why){
+  var t=new Date().toLocaleTimeString('id-ID');
+  logs.unshift('<li><b>'+t+'</b> Backfire pada '+fmt(rpm)+' rpm ('+why+')</li>');logs=logs.slice(0,30);
+  $('log').innerHTML=logs.join('');
+  $('bar').classList.add('flash');setTimeout(function(){$('bar').classList.remove('flash')},140);
+  if(S.snd)try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    var n=AC.sampleRate*0.12,b=AC.createBuffer(1,n,AC.sampleRate),d=b.getChannelData(0);
+    for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);
+    var s=AC.createBufferSource(),g=AC.createGain();g.gain.value=0.5;s.buffer=b;s.connect(g);g.connect(AC.destination);s.start();
+  }catch(e){}
+}
+
+/* ---------- Mesin ---------- */
+function tick(){
+  var L=S.limit,t=timing(rpm),status='Normal',cls='var(--ok)',cutNow=false,wasCut=cutOn;
+  if(thr||$('lock').checked){
+    var g=330*(1-rpm/17000);
+    if(S.lmode==='hard'){
+      if(rpm>=L)cutOn=true;
+      if(cutOn&&rpm<=L-S.hyst)cutOn=false;
+      if(cutOn){g=-300;cutNow=true}
+    }else if(S.lmode==='soft'){
+      var f=Math.max(0,Math.min(1,(rpm-(L-800))/800));
+      g*=(1-f);t=t*(1-f)+3*f;
+      if(f>0){status='Soft aktif';cls='var(--warn)'}
+    }else{
+      if(rpm>=L&&Math.random()<S.cut/100){g=-250;cutNow=true}
+    }
+    rpm+=g;
+  }else{
+    cutOn=false;
+    rpm-=150+rpm*0.02;
+    if(S.bf&&rpm>=S.bfs&&Math.random()<S.bfi/100*0.05*3)pop('gas dilepas');
+  }
+  rpm=Math.max(1400,Math.min(14000,rpm));
+  if(S.bf&&S.bfl&&S.lmode==='hard'&&cutOn&&!wasCut)pop('limiter memotong');
+  if(S.bf&&S.bfl&&S.lmode==='partial'&&cutNow&&Math.random()<0.2)pop('limiter memotong');
+  if(cutNow){status='Limiter aktif';cls='var(--bad)'}
+  else if(status==='Normal'&&rpm>=L-500&&(thr||$('lock').checked)){status='Mendekati limiter';cls='var(--warn)'}
+  $('oR').textContent=fmt(rpm);
+  $('oT').textContent=cutNow&&S.lmode==='hard'?'CUT':t.toFixed(1)+'°';
+  $('oD').textContent=cutNow&&S.lmode==='hard'?'-':fmt(((360-t)/360)*60e6/rpm);
+  $('st').textContent=status;$('st').style.color=cls;
+  $('fill').style.width=(rpm/14000*100)+'%';
+  drawChart();
+}
+var g=$('gas');
+g.onpointerdown=function(e){thr=true;g.setPointerCapture&&g.setPointerCapture(e.pointerId)};
+['onpointerup','onpointercancel','onpointerleave'].forEach(function(k){g[k]=function(){thr=false}});
+document.onkeydown=function(e){if(e.code==='Space'&&e.target.tagName!=='TEXTAREA'&&e.target.tagName!=='INPUT'&&e.target.tagName!=='SELECT'){thr=true;e.preventDefault()}};
+document.onkeyup=function(e){if(e.code==='Space')thr=false};
+setInterval(tick,50);
+sync();
+</script>
+</body>
+</html>
