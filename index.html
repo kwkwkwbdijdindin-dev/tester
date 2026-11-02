@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MIKO. — Portofolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070a;--fg:#f4f1ee;--acc:#a1a1aa;--mut:#8b8b93;--line:#1f1f26;--card:#0e0e13;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:inherit;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font:400 15px/1.6 Inter,system-ui,sans-serif;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+h1,h2,h3,.an{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;line-height:.95}
+em{font-style:normal;color:var(--acc)}
+#bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:3px;width:0;background:var(--acc);z-index:70;box-shadow:0 0 12px var(--acc)}
+nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;background:linear-gradient(var(--bg),transparent)}
+nav b{color:#0a0a0c;font:400 20px Anton,sans-serif;letter-spacing:1px;background:var(--acc);padding:2px 8px}
+nav div{display:flex;gap:18px;font-size:12px;color:var(--mut)}
+nav a{color:inherit;text-decoration:none;transition:.2s}nav a:hover{color:var(--fg)}
+section{padding:90px 5vw;position:relative}
+.tag{font-size:11px;letter-spacing:3px;color:var(--mut);text-transform:uppercase;margin-bottom:14px}
+h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
+/* hero */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding-top:110px;background:radial-gradient(60% 50% at 70% 60%,#1c1c20,transparent)}
+.bgt{position:absolute;top:12%;left:-1vw;font:400 clamp(90px,26vw,380px)/1 Anton,sans-serif;color:var(--acc);letter-spacing:-2px;white-space:nowrap;opacity:.95;animation:slide 1.4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes slide{from{transform:translateX(-8%);opacity:0}}
+.hi{font:italic 400 clamp(18px,3vw,30px) Georgia,serif;color:var(--fg);position:relative;z-index:3}
+.nm{font-size:clamp(64px,15vw,190px);position:relative;z-index:3;text-shadow:0 6px 30px #000}
+.role{color:var(--acc);font:400 clamp(18px,3vw,28px) Anton,sans-serif;letter-spacing:2px;margin:8px 0 14px;position:relative;z-index:3}
+.hp{max-width:420px;color:#cfcfd6;position:relative;z-index:3;text-shadow:0 2px 10px #000}
+.btn{display:inline-block;margin-top:22px;padding:13px 24px;background:var(--acc);color:#0a0a0c;text-decoration:none;font-weight:600;font-size:13px;letter-spacing:1px;position:relative;z-index:3;transition:.25s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px #a1a1aa66}
+.fig{position:absolute;right:-4vw;bottom:0;width:min(62vw,520px);z-index:2;animation:rise 1.2s .3s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 40px #a1a1aa55)}
+@keyframes rise{from{transform:translateY(12%);opacity:0}}
+.st{position:absolute;right:5vw;top:30%;z-index:4;text-align:right;display:flex;flex-direction:column;gap:10px}
+.st span{font:400 clamp(28px,5vw,52px) Anton,sans-serif;color:var(--acc)}.st small{display:block;font:400 9px Inter;color:#cfcfd6;letter-spacing:2px;margin-top:-4px}
+/* works */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.tabs button{background:none;border:1px solid var(--line);color:var(--mut);padding:7px 16px;font:500 12px Inter;cursor:pointer;transition:.2s}
+.tabs button.on,.tabs button:hover{background:var(--acc);border-color:var(--acc);color:#0a0a0c}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);overflow:hidden;transition:.4s;cursor:pointer}
+.card.hide{display:none}.card:hover{transform:translateY(-6px);border-color:var(--acc)}
+.th{height:150px;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--a),var(--b))}
+.th::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#0004 0 2px,transparent 2px 5px);animation:scan 3s linear infinite}
+.th::after{content:"▶";position:absolute;right:12px;bottom:10px;font-size:14px;background:#000a;border-radius:50%;width:30px;height:30px;display:grid;place-items:center}
+@keyframes scan{to{transform:translateY(20px)}}
+.card:hover .th{filter:saturate(1.6) brightness(1.2)}
+.ci{padding:14px;display:flex;gap:12px;align-items:flex-start}.ci i{font:400 22px Anton;color:var(--acc);font-style:normal}.ci b{display:block;font:400 17px Anton;text-transform:uppercase;letter-spacing:.5px}.ci small{color:var(--mut);font-size:12px}
+/* marquee */
+.mq{overflow:hidden;border-block:1px solid var(--line);padding:22px 0;margin-top:50px}
+.mq div{display:flex;gap:60px;width:max-content;animation:mq 22s linear infinite;font:400 34px Anton;color:#2b2b33;text-transform:uppercase}
+.mq span:hover{color:var(--acc)}@keyframes mq{to{transform:translateX(-50%)}}
+.mq.b{margin-top:0;border-top:0}.mq.b div{animation-direction:reverse;animation-duration:26s;color:transparent;-webkit-text-stroke:1px #55555d}.mq.b span:hover{color:var(--fg)}
+/* awards */
+.aw{display:grid;gap:30px}@media(min-width:800px){.aw{grid-template-columns:1fr 1.4fr;align-items:center}}
+.big{font:400 clamp(110px,24vw,230px) Anton;line-height:.9}.big em{font-size:.6em}
+.ls div{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);transition:.3s}.ls div:hover{padding-left:14px;color:var(--acc)}
+.ls b{font:400 22px Anton;color:var(--acc)}
+/* about */
+.ab{display:grid;gap:34px}@media(min-width:800px){.ab{grid-template-columns:1fr 1fr 1fr}}
+.ab h4{font:400 12px Inter;letter-spacing:2px;color:var(--acc);margin-bottom:6px;text-transform:uppercase}.ab p{color:#b9b9c1;font-size:13px;margin-bottom:18px}.ab strong{color:var(--fg);display:block;font-size:14px}
+.stp{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.stp i{font:400 18px Anton;color:var(--acc);font-style:normal}
+.q{background:var(--acc);padding:28px;min-height:230px;display:flex;flex-direction:column;justify-content:space-between;transform:rotate(1.5deg);transition:.4s}.q:hover{transform:rotate(0) scale(1.03)}
+.q p{font:400 28px/1.1 Anton;color:#0a0a0c;text-transform:uppercase;margin:0}.q span{font:italic 22px Georgia;color:#0a0a0c99}
+/* timeline */
+.tl{position:relative;padding-left:28px;max-width:760px}
+.tl::before{content:"";position:absolute;left:4px;top:0;bottom:0;width:2px;background:var(--line)}
+.tl u{position:absolute;left:4px;top:0;width:2px;height:0;background:var(--acc);box-shadow:0 0 10px var(--acc)}
+.tl div{position:relative;margin-bottom:34px}.tl div::before{content:"";position:absolute;left:-28px;top:6px;width:10px;height:10px;background:var(--bg);border:2px solid var(--acc);border-radius:50%}
+.tl small{color:var(--mut);letter-spacing:2px;font-size:11px}.tl b{display:block;font:400 24px Anton;text-transform:uppercase}.tl p{color:#b9b9c1;font-size:13px}
+/* contact */
+.ct{display:grid;gap:30px}@media(min-width:800px){.ct{grid-template-columns:1.1fr 1fr;align-items:center}}
+.ct h2{font-size:clamp(54px,12vw,130px)}
+.ci2 a{display:flex;gap:14px;padding:12px 0;color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line);transition:.3s}.ci2 a:hover{color:var(--acc);padding-left:10px}
+.vid{aspect-ratio:16/10;background:radial-gradient(circle at 30% 30%,#2c2c32,#0a0a0f 70%);border:1px solid var(--line);display:grid;place-items:center;position:relative;overflow:hidden}
+.vid h3{font-size:clamp(34px,7vw,60px);text-align:left;position:absolute;left:20px;top:18px}
+.pl{width:58px;height:58px;border-radius:50%;background:var(--acc);color:#0a0a0c;display:grid;place-items:center;position:absolute;right:18px;bottom:18px;animation:pu 1.8s infinite}
+@keyframes pu{0%{box-shadow:0 0 0 0 #a1a1aaaa}100%{box-shadow:0 0 0 24px #a1a1aa00}}
+footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spacing:2px;border-top:1px solid var(--line)}
+/* multi cursor */
+.cur{position:fixed;left:0;top:0;pointer-events:none;z-index:90;will-change:transform;filter:drop-shadow(0 0 4px currentColor)}
+@media(max-width:560px){nav div a:nth-child(n+4){display:none}.st{top:24%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<nav><b>MIKO.</b><div><a href="#karya">Karya</a><a href="#awards">Awards</a><a href="#tentang">Tentang</a><a href="#jalan">Perjalanan</a><a href="#kontak">Kontak</a></div></nav>
+
+<section id="hero">
+  <div class="bgt">PORTFOLIO</div>
+  <svg class="fig" viewBox="0 0 300 400" aria-hidden="true">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a1a20"/><stop offset="1" stop-color="#050507"/></linearGradient></defs>
+    <path d="M10 400C10 310 70 272 150 262c80 10 140 48 140 138Z" fill="url(#g)" stroke="#a1a1aa" stroke-width="2"/>
+    <path d="M150 262l-34 70 34 68 34-68Z" fill="#0d0d11"/><path d="M116 332l34-70-48 14ZM184 332l-34-70 48 14Z" fill="#050507" stroke="#a1a1aa55"/>
+    <rect x="132" y="215" width="36" height="52" rx="14" fill="#2a2024"/>
+    <ellipse cx="150" cy="155" rx="52" ry="64" fill="#3a2a2c"/>
+    <path d="M96 150C90 80 130 70 152 72c34 0 62 20 54 78-6-34-26-46-54-48-30 2-50 16-56 48Z" fill="#0a0a0c" stroke="#a1a1aa" stroke-width="1.5"/>
+    <path d="M200 120c10 40 4 90-26 112" stroke="#a1a1aa" stroke-width="2" fill="none" opacity=".7"/>
+  </svg>
+  <div class="st"><div><span>3.</span><small>BIDANG</small></div><div><span>10+</span><small>PROYEK</small></div></div>
+  <p class="hi">Halo, saya</p>
+  <h1 class="nm">MIKO.</h1>
+  <p class="role" id="ty">DEVELOPER &amp; KREATOR</p>
+  <p class="hp">Mengubah ide jadi website, game, dan perangkat yang hidup. Dari logika yang rapi sampai kode yang berani tampil beda.</p>
+  <a class="btn" href="#karya">LIHAT KARYA →</a>
+</section>
+
+<section id="karya">
+  <p class="tag rv">02 / Karya Terpilih</p>
+  <h2 class="rv">KARYA YANG <em>BICARA.</em></h2>
+  <div class="tabs rv" id="tabs"><button class="on" data-f="all">mahasiswaua</button><button data-f="web">Web</button><button data-f="game">Game</button><button data-f="iot">IoT</button></div>
+  <div class="grid" id="grid">
+    <div class="card rv" data-c="iot"><div class="th" style="--a:#0a3a4a;--b:#050510"></div><div class="ci"><i>01</i><div><b>Smarthome Panel</b><small>Pompa, lampu, kipas, level tandon</small></div></div></div>
+    <div class="card rv" data-c="game"><div class="th" style="--a:#3a3a40;--b:#0c0c0f"></div><div class="ci"><i>02</i><div><b>Love Bird Loncat</b><small>Game ala Flappy Bird + musik</small></div></div></div>
+    <div class="card rv" data-c="web"><div class="th" style="--a:#3a0a5a;--b:#06060f"></div><div class="ci"><i>03</i><div><b>Video Hobi</b><small>Salju, mode gahar, tombol link</small></div></div></div>
+    <div class="card rv" data-c="iot"><div class="th" style="--a:#0a4a2a;--b:#050a08"></div><div class="ci"><i>04</i><div><b>ESP32 TFT Display</b><small>LCD ST7789 240×240</small></div></div></div>
+    <div class="card rv" data-c="web"><div class="th" style="--a:#5a3a0a;--b:#0a0605"></div><div class="ci"><i>05</i><div><b>Mapping Pengapian</b><small>Mode derajat &amp; mode waktu</small></div></div></div>
+    <div class="card rv" data-c="game"><div class="th" style="--a:#a1a1aa;--b:#0c0c0f"></div><div class="ci"><i>06</i><div><b>Intro Mikosa</b><small>Pembuka penuh animasi</small></div></div></div>
+  </div>
+  <div class="mq"><div><span>ESP32</span><span>ESP8266</span><span>Python</span><span>HTML5</span><span>JavaScript</span><span>Arduino</span><span>ESP32</span><span>ESP8266</span><span>Python</span><span>HTML5</span><span>JavaScript</span><span>Arduino</span></div></div>
+  <div class="mq b"><div><span></span><span>Terus Berkarya</span><span>Jangan Menyerah</span><span>Pantang Mundur</span><span>Gas Terus</span><span>Pasti Bisa</span><span>Semangat</span><span>Terus Berkarya</span><span>Jangan Menyerah</span><span>Pantang Mundur</span><span>inpo bolo</span><span>Pasti Bisa</span></div></div>
+</section>
+
+<section id="awards">
+  <div class="aw">
+    <div class="rv"><p class="tag">03 / Pencapaian</p><h2 style="margin-bottom:10px">THE <em>WORK.</em><br>THE RESULT.</h2><div class="big"><span data-to="10">0</span><em>+</em></div><p class="tag">Proyek selesai</p></div>
+    <div class="ls rv"><div><span>Website Smarthome</span><b>2026</b></div><div><span>Game Love Bird Loncat</span><b>2026</b></div><div><span>Loading ala Hacker ()</span><b>2026</b></div><div><span>Tampilan ESP32 &amp; ESP8266</span><b>2026</b></div></div>
+  </div>
+</section>
+
+<section id="tentang">
+  <p class="tag rv">04 / Di Balik Layar</p>
+  <h2 class="rv">BUKAN SEKADAR KODE.<br>TAPI CARA <em>BERCERITA.</em></h2>
+  <div class="ab">
+    <div class="rv"><h4>Pendidikan</h4><strong></strong><p>.</p><h4>Skill</h4><strong>Web &amp; Game</strong><p>HTML, CSS, JavaScript, animasi, audio.</p><strong>Elektronik &amp; </strong><p>ESP32, ESP8266, tkinter, Bluetooth.</p></div>
+    <div class="rv"><h4>Dari ide ke karya</h4><div class="stp"><i>01</i><div><strong>Ide</strong><p style="margin:0">Mulai dari hal yang bikin penasaran.</p></div></div><div class="stp"><i>02</i><div><strong>Rencana</strong><p style="margin:0">Susun logika, tampilan, dan alurnya.</p></div></div><div class="stp"><i>03</i><div><strong>Karya</strong><p style="margin:0">Coba, perbaiki, sampai terasa nyata.</p></div></div></div>
+    <div class="q rv"><p>Dari ide dan logika, sampai karya yang hidup.</p><span>— Miko</span></div>
+  </div>
+</section>
+
+<section id="jalan">
+  <p class="tag rv">05 / Perjalanan</p>
+  <h2 class="rv">LITTLE WINS.<br><em>BIG MEANING.</em></h2>
+  <div class="tl" id="tl"><u></u>
+    <div class="rv"><small>2026</small><b></b><p></p></div>
+    <div class="rv"><small>2026</small><b>Membangun Website &amp; Game</b><p>Dari halaman hadiah, intro animasi, sampai game loncat.</p></div>
+    <div class="rv"><small>2026</small><b>Eksperimen Elektronik</b><p>ESP32 dan ESP8266 dengan layar TFT dan animasi LED.</p></div>
+    <div class="rv"><small>SEKARANG</small><b>Terus Berkarya</b><p>Satu proyek baru, satu pelajaran baru.</p></div>
+  </div>
+</section>
+
+<section id="kontak">
+  <p class="tag rv">06 / Cerita Berikutnya</p>
+  <div class="ct">
+    <div class="rv"><h2>LET’S WORK<br><em>TOGETHER.</em></h2><p style="color:#b9b9c1;margin-bottom:20px">Punya ide yang ingin diwujudkan? Ayo bikin sesuatu yang terasa nyata.</p>
+      <div class="ci2"><a href="#">✉ &nbsp;emailmu@contoh.com</a><a href="#">◎ &nbsp;@usernamemu</a><a href="#">☏ &nbsp;+62 8xx-xxxx-xxxx</a></div></div>
+    <div class="vid rv"><h3>MAKE IT<br><em>FEEL REAL.</em></h3><div class="pl">▶</div></div>
+  </div>
+</section>
+<footer>© 2026 MIKO. hasil mecut Ai🤣</footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+// reveal + counter
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);
+ const c=e.target.querySelector('[data-to]');if(c){let n=0,t=+c.dataset.to;const i=setInterval(()=>{c.textContent=++n;if(n>=t)clearInterval(i)},110)}}}),{threshold:.15});
+$$('.rv').forEach((e,i)=>{e.style.transitionDelay=(i%4)*.08+'s';io.observe(e)});
+// filter
+$('#tabs').onclick=e=>{const f=e.target.dataset.f;if(!f)return;$$('#tabs button').forEach(b=>b.classList.toggle('on',b===e.target));$$('.card').forEach(c=>c.classList.toggle('hide',f!=='all'&&c.dataset.c!==f))};
+// progress + timeline
+addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=(scrollY/(h.scrollHeight-innerHeight)*100)+'%';
+ const t=$('#tl'),r=t.getBoundingClientRect(),p=Math.min(1,Math.max(0,(innerHeight*.7-r.top)/r.height));t.querySelector('u').style.height=p*100+'%'},{passive:true});
+// typing role
+const roles=['DEVELOPER & KREATOR','WEB & GAME','ESP32 MAKER','PYTHON TINKERER'];let ri=0,ci=0,del=false;const ty=$('#ty');
+(function tick(){const w=roles[ri];ci+=del?-1:1;ty.textContent=w.slice(0,ci)+'▍';let d=del?35:80;
+ if(!del&&ci===w.length){del=true;d=1400}else if(del&&ci===0){del=false;ri=(ri+1)%roles.length;d=300}setTimeout(tick,d)})();
+// kursor putih, gerak acak
+const P={x:innerWidth*.6,y:innerHeight*.5,t:-9e9},R=(a,b)=>a+Math.random()*(b-a);
+const cs=Array.from({length:6},()=>{const d=document.createElement('div');d.className='cur';d.style.color='#fff';d.innerHTML='<svg width="16" height="16" viewBox="0 0 16 16"><path d="M1 1l5 14 2-6 6-2z" fill="currentColor"/></svg>';document.body.appendChild(d);
+ return{d,x:R(0,innerWidth),y:R(0,innerHeight),tx:0,ty:0,n:0,k:.03}});
+addEventListener('pointermove',e=>{P.x=e.clientX;P.y=e.clientY;P.t=performance.now()},{passive:true});
+(function loop(now){cs.forEach(c=>{
+ if(now>c.n){const near=now-P.t<3000&&Math.random()<.6;
+  c.tx=near?P.x+R(-220,220):R(0,innerWidth);c.ty=near?P.y+R(-220,220):R(0,innerHeight);
+  c.k=R(.01,.06);c.n=now+R(500,2600)}
+ c.x+=(c.tx-c.x)*c.k;c.y+=(c.ty-c.y)*c.k;
+ c.d.style.transform=`translate(${c.x}px,${c.y}px)`});requestAnimationFrame(loop)})(0);
+</script>
+</body>
+</html>
