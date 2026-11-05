@@ -10,6 +10,7 @@
 html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:inherit;margin:0;padding:0}
 body{background:var(--bg);color:var(--fg);font:400 15px/1.6 Inter,system-ui,sans-serif;overflow-x:hidden}
+body.lock{overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
 h1,h2,h3,.an{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;line-height:.95}
 em{font-style:normal;color:var(--acc)}
@@ -22,6 +23,15 @@ section{padding:90px 5vw;position:relative}
 .tag{font-size:11px;letter-spacing:3px;color:var(--mut);text-transform:uppercase;margin-bottom:14px}
 h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 .rv{opacity:0;transform:translateY(34px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
+/* video latar (utuh, tidak ter-zoom) */
+#bgv{position:fixed;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:-1;opacity:.5}
+/* layar awal */
+#start{position:fixed;inset:0;z-index:200;background:radial-gradient(60% 50% at 50% 50%,#1c1c20,#07070a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:20px;transition:opacity .7s,visibility .7s}
+#start.hide{opacity:0;visibility:hidden;pointer-events:none}
+#start h1{font-size:clamp(80px,24vw,220px);text-shadow:0 6px 30px #000}
+#start p{color:var(--mut);letter-spacing:3px;font-size:12px;text-transform:uppercase}
+#start .btn{border:0;cursor:pointer;font-family:inherit;margin-top:18px}
+#snd{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:80;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#000a;color:#fff;font-size:18px;display:none;place-items:center;cursor:pointer}
 /* hero */
 #hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding-top:110px;background:radial-gradient(60% 50% at 70% 60%,#1c1c20,transparent)}
 .bgt{position:absolute;top:12%;left:-1vw;font:400 clamp(90px,26vw,380px)/1 Anton,sans-serif;color:var(--acc);letter-spacing:-2px;white-space:nowrap;opacity:.95;animation:slide 1.4s cubic-bezier(.2,.8,.2,1) both}
@@ -32,11 +42,12 @@ h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 .hp{max-width:420px;color:#cfcfd6;position:relative;z-index:3;text-shadow:0 2px 10px #000}
 .btn{display:inline-block;margin-top:22px;padding:13px 24px;background:var(--acc);color:#0a0a0c;text-decoration:none;font-weight:600;font-size:13px;letter-spacing:1px;position:relative;z-index:3;transition:.25s}
 .btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px #a1a1aa66}
+.btn.alt{background:none;color:var(--fg);border:1px solid var(--acc);margin-left:8px}
 .fig{position:absolute;right:-4vw;bottom:0;width:min(62vw,520px);z-index:2;animation:rise 1.2s .3s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 40px #a1a1aa55)}
 @keyframes rise{from{transform:translateY(12%);opacity:0}}
 .st{position:absolute;right:5vw;top:30%;z-index:4;text-align:right;display:flex;flex-direction:column;gap:10px}
 .st span{font:400 clamp(28px,5vw,52px) Anton,sans-serif;color:var(--acc)}.st small{display:block;font:400 9px Inter;color:#cfcfd6;letter-spacing:2px;margin-top:-4px}
-/* works */
+/* karya */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
 .tabs button{background:none;border:1px solid var(--line);color:var(--mut);padding:7px 16px;font:500 12px Inter;cursor:pointer;transition:.2s}
 .tabs button.on,.tabs button:hover{background:var(--acc);border-color:var(--acc);color:#0a0a0c}
@@ -59,7 +70,7 @@ h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 .big{font:400 clamp(110px,24vw,230px) Anton;line-height:.9}.big em{font-size:.6em}
 .ls div{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);transition:.3s}.ls div:hover{padding-left:14px;color:var(--acc)}
 .ls b{font:400 22px Anton;color:var(--acc)}
-/* about */
+/* tentang */
 .ab{display:grid;gap:34px}@media(min-width:800px){.ab{grid-template-columns:1fr 1fr 1fr}}
 .ab h4{font:400 12px Inter;letter-spacing:2px;color:var(--acc);margin-bottom:6px;text-transform:uppercase}.ab p{color:#b9b9c1;font-size:13px;margin-bottom:18px}.ab strong{color:var(--fg);display:block;font-size:14px}
 .stp{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.stp i{font:400 18px Anton;color:var(--acc);font-style:normal}
@@ -71,7 +82,11 @@ h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 .tl u{position:absolute;left:4px;top:0;width:2px;height:0;background:var(--acc);box-shadow:0 0 10px var(--acc)}
 .tl div{position:relative;margin-bottom:34px}.tl div::before{content:"";position:absolute;left:-28px;top:6px;width:10px;height:10px;background:var(--bg);border:2px solid var(--acc);border-radius:50%}
 .tl small{color:var(--mut);letter-spacing:2px;font-size:11px}.tl b{display:block;font:400 24px Anton;text-transform:uppercase}.tl p{color:#b9b9c1;font-size:13px}
-/* contact */
+/* komisi */
+.km{display:grid;gap:30px}@media(min-width:800px){.km{grid-template-columns:1.1fr 1fr;align-items:center}}
+.free{font:400 clamp(90px,22vw,200px) Anton;line-height:.9;color:var(--acc);text-transform:uppercase;text-shadow:0 0 40px #a1a1aa44}
+.km .lead{color:#b9b9c1;margin-bottom:8px;max-width:460px}
+/* kontak */
 .ct{display:grid;gap:30px}@media(min-width:800px){.ct{grid-template-columns:1.1fr 1fr;align-items:center}}
 .ct h2{font-size:clamp(54px,12vw,130px)}
 .ci2 a{display:flex;gap:14px;padding:12px 0;color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line);transition:.3s}.ci2 a:hover{color:var(--acc);padding-left:10px}
@@ -80,15 +95,26 @@ h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 .pl{width:58px;height:58px;border-radius:50%;background:var(--acc);color:#0a0a0c;display:grid;place-items:center;position:absolute;right:18px;bottom:18px;animation:pu 1.8s infinite}
 @keyframes pu{0%{box-shadow:0 0 0 0 #a1a1aaaa}100%{box-shadow:0 0 0 24px #a1a1aa00}}
 footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spacing:2px;border-top:1px solid var(--line)}
-/* multi cursor */
+/* kursor */
 .cur{position:fixed;left:0;top:0;pointer-events:none;z-index:90;will-change:transform;filter:drop-shadow(0 0 4px currentColor)}
 @media(max-width:560px){nav div a:nth-child(n+4){display:none}.st{top:24%}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
-<body>
+<body class="lock">
+
+<video id="bgv" src="video.mp4" loop playsinline preload="auto"></video>
+
+<div id="start">
+  <p>Selamat datang</p>
+  <h1>MIKO.</h1>
+  <p>Portofolio</p>
+  <button class="btn" id="go">MASUK ▶</button>
+</div>
+<button id="snd" aria-label="Suara">🔊</button>
+
 <div id="bar"></div>
-<nav><b>MIKO.</b><div><a href="#karya">Karya</a><a href="#awards">Awards</a><a href="#tentang">Tentang</a><a href="#jalan">Perjalanan</a><a href="#kontak">Kontak</a></div></nav>
+<nav><b>MIKO.</b><div><a href="#karya">Karya</a><a href="#awards">Awards</a><a href="#komisi">Komisi</a><a href="#tentang">Tentang</a><a href="#jalan">Perjalanan</a><a href="#kontak">Kontak</a></div></nav>
 
 <section id="hero">
   <div class="bgt">PORTFOLIO</div>
@@ -106,7 +132,10 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
   <h1 class="nm">MIKO.</h1>
   <p class="role" id="ty">DEVELOPER &amp; KREATOR</p>
   <p class="hp">Mengubah ide jadi website, game, dan perangkat yang hidup. Dari logika yang rapi sampai kode yang berani tampil beda.</p>
-  <a class="btn" href="#karya">LIHAT KARYA →</a>
+  <div>
+    <a class="btn" href="#karya">LIHAT KARYA →</a>
+    <a class="btn alt" href="https://www.tiktok.com/@usernameTikTok" target="_blank" rel="noopener">♪ TIKTOK</a>
+  </div>
 </section>
 
 <section id="karya">
@@ -132,8 +161,26 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
   </div>
 </section>
 
+<section id="komisi">
+  <p class="tag rv">04 / Komisi Terbuka</p>
+  <div class="km">
+    <div class="rv">
+      <h2>KOMISI<br><em>SKETSA.</em></h2>
+      <p class="lead">Buka komisi sketsa wajah gaya simpel art. Harganya gratis. Kirim fotomu lewat chat IG, hasilnya bisa kamu simpan.</p>
+      <a class="btn" href="https://ig.me/m/mikosaputrasa" target="_blank" rel="noopener">CHAT IG SEKARANG →</a>
+      <a class="btn alt" href="https://www.tiktok.com/@usernameTikTok" target="_blank" rel="noopener">♪ TIKTOK</a>
+    </div>
+    <div class="rv">
+      <div class="free">GRATIS</div>
+      <div class="stp"><i>01</i><div><strong>Chat IG</strong><p style="margin:0;color:#b9b9c1;font-size:13px">Kirim foto wajah yang jelas dan terang.</p></div></div>
+      <div class="stp"><i>02</i><div><strong>Sketsa</strong><p style="margin:0;color:#b9b9c1;font-size:13px">Digambar gaya simpel art dengan garis bersih.</p></div></div>
+      <div class="stp"><i>03</i><div><strong>Jadi</strong><p style="margin:0;color:#b9b9c1;font-size:13px">Hasil dikirim kembali lewat chat IG.</p></div></div>
+    </div>
+  </div>
+</section>
+
 <section id="tentang">
-  <p class="tag rv">04 / Di Balik Layar</p>
+  <p class="tag rv">05 / Di Balik Layar</p>
   <h2 class="rv">BUKAN SEKADAR KODE.<br>TAPI CARA <em>BERCERITA.</em></h2>
   <div class="ab">
     <div class="rv"><h4>Pendidikan</h4><strong></strong><p>.</p><h4>Skill</h4><strong>Web &amp; Game</strong><p>HTML, CSS, JavaScript, animasi, audio.</p><strong>Elektronik &amp; </strong><p>ESP32, ESP8266, tkinter, Bluetooth.</p></div>
@@ -143,7 +190,7 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
 </section>
 
 <section id="jalan">
-  <p class="tag rv">05 / Perjalanan</p>
+  <p class="tag rv">06 / Perjalanan</p>
   <h2 class="rv">LITTLE WINS.<br><em>BIG MEANING.</em></h2>
   <div class="tl" id="tl"><u></u>
     <div class="rv"><small>2026</small><b></b><p></p></div>
@@ -154,27 +201,40 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
 </section>
 
 <section id="kontak">
-  <p class="tag rv">06 / Cerita Berikutnya</p>
+  <p class="tag rv">07 / Cerita Berikutnya</p>
   <div class="ct">
     <div class="rv"><h2>LET’S WORK<br><em>TOGETHER.</em></h2><p style="color:#b9b9c1;margin-bottom:20px">Punya ide yang ingin diwujudkan? Ayo bikin sesuatu yang terasa nyata.</p>
-      <div class="ci2"><a href="#">✉ &nbsp;emailmu@contoh.com</a><a href="#">◎ &nbsp;@usernamemu</a><a href="#">☏ &nbsp;+62 8xx-xxxx-xxxx</a></div></div>
+      <div class="ci2">
+        <a href="#">✉ &nbsp;emailmu@contoh.com</a>
+        <a href="https://ig.me/m/mikosaputrasa" target="_blank" rel="noopener">◎ &nbsp;Chat Instagram @mikosaputrasa</a>
+        <a href="https://www.tiktok.com/@usernameTikTok" target="_blank" rel="noopener">♪ &nbsp;TikTok @usernameTikTok</a>
+        <a href="#">☏ &nbsp;+62 8xx-xxxx-xxxx</a>
+      </div></div>
     <div class="vid rv"><h3>MAKE IT<br><em>FEEL REAL.</em></h3><div class="pl">▶</div></div>
   </div>
 </section>
-<footer>© 2026 MIKOsaputra</footer>
+<footer>© 2026 MIKO.</footer>
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+// layar awal + video autoplay berulang
+const v=$('#bgv'),stt=$('#start'),snd=$('#snd');
+$('#go').onclick=()=>{
+ stt.classList.add('hide');document.body.classList.remove('lock');
+ v.loop=true;v.muted=false;snd.style.display='grid';
+ v.play().then(()=>{snd.textContent='🔊'}).catch(()=>{v.muted=true;v.play().catch(()=>{});snd.textContent='🔇'});
+};
+snd.onclick=()=>{v.muted=!v.muted;snd.textContent=v.muted?'🔇':'🔊'};
 // reveal + counter
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);
  const c=e.target.querySelector('[data-to]');if(c){let n=0,t=+c.dataset.to;const i=setInterval(()=>{c.textContent=++n;if(n>=t)clearInterval(i)},110)}}}),{threshold:.15});
 $$('.rv').forEach((e,i)=>{e.style.transitionDelay=(i%4)*.08+'s';io.observe(e)});
-// filter
+// filter karya
 $('#tabs').onclick=e=>{const f=e.target.dataset.f;if(!f)return;$$('#tabs button').forEach(b=>b.classList.toggle('on',b===e.target));$$('.card').forEach(c=>c.classList.toggle('hide',f!=='all'&&c.dataset.c!==f))};
 // progress + timeline
 addEventListener('scroll',()=>{const h=document.documentElement;$('#bar').style.width=(scrollY/(h.scrollHeight-innerHeight)*100)+'%';
  const t=$('#tl'),r=t.getBoundingClientRect(),p=Math.min(1,Math.max(0,(innerHeight*.7-r.top)/r.height));t.querySelector('u').style.height=p*100+'%'},{passive:true});
-// typing role
+// teks role mengetik
 const roles=['DEVELOPER & KREATOR','WEB & GAME','ESP32 MAKER','PYTHON TINKERER'];let ri=0,ci=0,del=false;const ty=$('#ty');
 (function tick(){const w=roles[ri];ci+=del?-1:1;ty.textContent=w.slice(0,ci)+'▍';let d=del?35:80;
  if(!del&&ci===w.length){del=true;d=1400}else if(del&&ci===0){del=false;ri=(ri+1)%roles.length;d=300}setTimeout(tick,d)})();
