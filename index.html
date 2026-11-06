@@ -12,7 +12,7 @@ html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
 body{background:var(--bg);color:var(--fg);font:400 15px/1.6 Inter,system-ui,sans-serif;overflow-x:hidden}
 body.lock{overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
-h1,h2,h3,.an{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;line-height:.95}
+h1,h2,h3{font-family:Anton,Impact,'Arial Narrow',sans-serif;font-weight:400;text-transform:uppercase;line-height:.95}
 em{font-style:normal;color:var(--acc)}
 #bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;height:3px;width:0;background:var(--acc);z-index:70;box-shadow:0 0 12px var(--acc)}
 nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:16px 5vw;background:linear-gradient(var(--bg),transparent)}
@@ -23,7 +23,6 @@ section{padding:90px 5vw;position:relative}
 .tag{font-size:11px;letter-spacing:3px;color:var(--mut);text-transform:uppercase;margin-bottom:14px}
 h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 .rv{opacity:0;transform:translateY(34px);transition:opacity .8s,transform .8s}.rv.in{opacity:1;transform:none}
-/* video latar (utuh, tidak ter-zoom) */
 #bgv{position:fixed;inset:0;width:100%;height:100%;object-fit:contain;background:#000;z-index:-1;opacity:.5}
 /* layar awal */
 #start{position:fixed;inset:0;z-index:200;background:radial-gradient(60% 50% at 50% 50%,#1c1c20,#07070a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:20px;transition:opacity .7s,visibility .7s}
@@ -32,21 +31,28 @@ h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 #start p{color:var(--mut);letter-spacing:3px;font-size:12px;text-transform:uppercase}
 #start .btn{border:0;cursor:pointer;font-family:inherit;margin-top:18px}
 #snd{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:80;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#000a;color:#fff;font-size:18px;display:none;place-items:center;cursor:pointer}
-/* hero */
-#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;padding-top:110px;background:radial-gradient(60% 50% at 70% 60%,#1c1c20,transparent)}
-.bgt{position:absolute;top:12%;left:-1vw;font:400 clamp(90px,26vw,380px)/1 Anton,sans-serif;color:var(--acc);letter-spacing:-2px;white-space:nowrap;opacity:.95;animation:slide 1.4s cubic-bezier(.2,.8,.2,1) both}
-@keyframes slide{from{transform:translateX(-8%);opacity:0}}
+/* hero (rata tengah) */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:hidden;padding-top:100px;background:radial-gradient(60% 50% at 50% 55%,#1c1c20,transparent)}
+.bgt{position:absolute;top:14%;left:0;right:0;text-align:center;font:400 clamp(90px,26vw,380px)/1 Anton,sans-serif;color:transparent;-webkit-text-stroke:2px var(--acc);letter-spacing:-2px;white-space:nowrap;opacity:.6;animation:slide 1.4s cubic-bezier(.2,.8,.2,1) both;pointer-events:none}
+@keyframes slide{from{transform:translateY(-6%);opacity:0}}
+@keyframes rise{from{transform:translateY(14%);opacity:0}}
+.jd{position:relative;z-index:3;font:400 clamp(22px,5vw,40px) Anton,sans-serif;letter-spacing:6px;color:var(--fg);text-transform:uppercase;margin-bottom:20px;padding:6px 18px;border:2px solid var(--acc);text-shadow:0 4px 20px #000;background:#07070acc}
+.pf{position:relative;width:min(52vw,250px);height:min(52vw,250px);margin:0 auto 22px;z-index:3;animation:rise 1.2s .3s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 40px #a1a1aa55)}
+.pf::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(#a1a1aa,#fff,#2a2a30,#a1a1aa,#fff,#2a2a30,#a1a1aa);animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pfi{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:#0e0e13;border:5px solid var(--bg)}
+.pfi img,.pfi svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.pfi img{display:none}
+.pf.has .pfi img{display:block}.pf.has .pfi svg{display:none}
 .hi{font:italic 400 clamp(18px,3vw,30px) Georgia,serif;color:var(--fg);position:relative;z-index:3}
-.nm{font-size:clamp(64px,15vw,190px);position:relative;z-index:3;text-shadow:0 6px 30px #000}
-.role{color:var(--acc);font:400 clamp(18px,3vw,28px) Anton,sans-serif;letter-spacing:2px;margin:8px 0 14px;position:relative;z-index:3}
-.hp{max-width:420px;color:#cfcfd6;position:relative;z-index:3;text-shadow:0 2px 10px #000}
+.nm{font-size:clamp(64px,15vw,170px);position:relative;z-index:3;text-shadow:0 6px 30px #000}
+.role{color:var(--acc);font:400 clamp(18px,3vw,28px) Anton,sans-serif;letter-spacing:2px;margin:8px 0 14px;position:relative;z-index:3;min-height:1.3em}
+.hp{max-width:460px;color:#cfcfd6;position:relative;z-index:3;text-shadow:0 2px 10px #000}
 .btn{display:inline-block;margin-top:22px;padding:13px 24px;background:var(--acc);color:#0a0a0c;text-decoration:none;font-weight:600;font-size:13px;letter-spacing:1px;position:relative;z-index:3;transition:.25s}
 .btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px #a1a1aa66}
 .btn.alt{background:none;color:var(--fg);border:1px solid var(--acc);margin-left:8px}
-.fig{position:absolute;right:-4vw;bottom:0;width:min(62vw,520px);z-index:2;animation:rise 1.2s .3s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 40px #a1a1aa55)}
-@keyframes rise{from{transform:translateY(12%);opacity:0}}
-.st{position:absolute;right:5vw;top:30%;z-index:4;text-align:right;display:flex;flex-direction:column;gap:10px}
-.st span{font:400 clamp(28px,5vw,52px) Anton,sans-serif;color:var(--acc)}.st small{display:block;font:400 9px Inter;color:#cfcfd6;letter-spacing:2px;margin-top:-4px}
+.st{display:flex;gap:38px;justify-content:center;margin-top:26px;position:relative;z-index:3}
+.st span{font:400 clamp(28px,5vw,46px) Anton,sans-serif;color:var(--acc)}.st small{display:block;font:400 9px Inter;color:#cfcfd6;letter-spacing:2px;margin-top:-4px}
 /* karya */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
 .tabs button{background:none;border:1px solid var(--line);color:var(--mut);padding:7px 16px;font:500 12px Inter;cursor:pointer;transition:.2s}
@@ -97,7 +103,7 @@ h2{font-size:clamp(40px,9vw,96px);margin-bottom:34px}
 footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spacing:2px;border-top:1px solid var(--line)}
 /* kursor */
 .cur{position:fixed;left:0;top:0;pointer-events:none;z-index:90;will-change:transform;filter:drop-shadow(0 0 4px currentColor)}
-@media(max-width:560px){nav div a:nth-child(n+4){display:none}.st{top:24%}}
+@media(max-width:560px){nav div a:nth-child(n+4){display:none}.jd{letter-spacing:3px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -118,16 +124,24 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
 
 <section id="hero">
   <div class="bgt">PORTFOLIO</div>
-  <svg class="fig" viewBox="0 0 300 400" aria-hidden="true">
-    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a1a20"/><stop offset="1" stop-color="#050507"/></linearGradient></defs>
-    <path d="M10 400C10 310 70 272 150 262c80 10 140 48 140 138Z" fill="url(#g)" stroke="#a1a1aa" stroke-width="2"/>
-    <path d="M150 262l-34 70 34 68 34-68Z" fill="#0d0d11"/><path d="M116 332l34-70-48 14ZM184 332l-34-70 48 14Z" fill="#050507" stroke="#a1a1aa55"/>
-    <rect x="132" y="215" width="36" height="52" rx="14" fill="#2a2024"/>
-    <ellipse cx="150" cy="155" rx="52" ry="64" fill="#3a2a2c"/>
-    <path d="M96 150C90 80 130 70 152 72c34 0 62 20 54 78-6-34-26-46-54-48-30 2-50 16-56 48Z" fill="#0a0a0c" stroke="#a1a1aa" stroke-width="1.5"/>
-    <path d="M200 120c10 40 4 90-26 112" stroke="#a1a1aa" stroke-width="2" fill="none" opacity=".7"/>
-  </svg>
-  <div class="st"><div><span>3.</span><small>BIDANG</small></div><div><span>10+</span><small>PROYEK</small></div></div>
+
+  <h2 class="jd">PORTOFOLIO <em>MIKO</em></h2>
+
+  <div class="pf" id="pf">
+    <div class="pfi">
+      <img id="pfimg" alt="Foto profil Miko">
+      <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1a1a20"/><stop offset="1" stop-color="#050507"/></linearGradient></defs>
+        <path d="M10 400C10 310 70 272 150 262c80 10 140 48 140 138Z" fill="url(#g)" stroke="#a1a1aa" stroke-width="2"/>
+        <path d="M150 262l-34 70 34 68 34-68Z" fill="#0d0d11"/><path d="M116 332l34-70-48 14ZM184 332l-34-70 48 14Z" fill="#050507" stroke="#a1a1aa55"/>
+        <rect x="132" y="215" width="36" height="52" rx="14" fill="#2a2024"/>
+        <ellipse cx="150" cy="155" rx="52" ry="64" fill="#3a2a2c"/>
+        <path d="M96 150C90 80 130 70 152 72c34 0 62 20 54 78-6-34-26-46-54-48-30 2-50 16-56 48Z" fill="#0a0a0c" stroke="#a1a1aa" stroke-width="1.5"/>
+        <path d="M200 120c10 40 4 90-26 112" stroke="#a1a1aa" stroke-width="2" fill="none" opacity=".7"/>
+      </svg>
+    </div>
+  </div>
+
   <p class="hi">Halo, saya</p>
   <h1 class="nm">MIKO.</h1>
   <p class="role" id="ty">DEVELOPER &amp; KREATOR</p>
@@ -136,12 +150,13 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
     <a class="btn" href="#karya">LIHAT KARYA →</a>
     <a class="btn alt" href="https://www.tiktok.com/@usernameTikTok" target="_blank" rel="noopener">♪ TIKTOK</a>
   </div>
+  <div class="st"><div><span>3</span><small>BIDANG</small></div><div><span>10+</span><small>PROYEK</small></div></div>
 </section>
 
 <section id="karya">
   <p class="tag rv">02 / Karya Terpilih</p>
   <h2 class="rv">KARYA YANG <em>BICARA.</em></h2>
-  <div class="tabs rv" id="tabs"><button class="on" data-f="all">mahasiswaua</button><button data-f="web">Web</button><button data-f="game">Game</button><button data-f="iot">IoT</button></div>
+  <div class="tabs rv" id="tabs"><button class="on" data-f="all">Semua</button><button data-f="web">Web</button><button data-f="game">Game</button><button data-f="iot">IoT</button></div>
   <div class="grid" id="grid">
     <div class="card rv" data-c="iot"><div class="th" style="--a:#0a3a4a;--b:#050510"></div><div class="ci"><i>01</i><div><b>Smarthome Panel</b><small>Pompa, lampu, kipas, level tandon</small></div></div></div>
     <div class="card rv" data-c="game"><div class="th" style="--a:#3a3a40;--b:#0c0c0f"></div><div class="ci"><i>02</i><div><b>Love Bird Loncat</b><small>Game ala Flappy Bird + musik</small></div></div></div>
@@ -151,13 +166,13 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
     <div class="card rv" data-c="game"><div class="th" style="--a:#a1a1aa;--b:#0c0c0f"></div><div class="ci"><i>06</i><div><b>Intro Mikosa</b><small>Pembuka penuh animasi</small></div></div></div>
   </div>
   <div class="mq"><div><span>ESP32</span><span>ESP8266</span><span>Python</span><span>HTML5</span><span>JavaScript</span><span>Arduino</span><span>ESP32</span><span>ESP8266</span><span>Python</span><span>HTML5</span><span>JavaScript</span><span>Arduino</span></div></div>
-  <div class="mq b"><div><span></span><span>Terus Berkarya</span><span>Jangan Menyerah</span><span>Pantang Mundur</span><span>Gas Terus</span><span>Pasti Bisa</span><span>Semangat</span><span>Terus Berkarya</span><span>Jangan Menyerah</span><span>Pantang Mundur</span><span>inpo bolo</span><span>Pasti Bisa</span></div></div>
+  <div class="mq b"><div><span>Terus Berkarya</span><span>Jangan Menyerah</span><span>Pantang Mundur</span><span>Gas Terus</span><span>Pasti Bisa</span><span>Semangat</span><span>Terus Berkarya</span><span>Jangan Menyerah</span><span>Pantang Mundur</span><span>Gas Terus</span><span>Pasti Bisa</span><span>Semangat</span></div></div>
 </section>
 
 <section id="awards">
   <div class="aw">
     <div class="rv"><p class="tag">03 / Pencapaian</p><h2 style="margin-bottom:10px">THE <em>WORK.</em><br>THE RESULT.</h2><div class="big"><span data-to="10">0</span><em>+</em></div><p class="tag">Proyek selesai</p></div>
-    <div class="ls rv"><div><span>Website Smarthome</span><b>2026</b></div><div><span>Game Love Bird Loncat</span><b>2026</b></div><div><span>Loading ala Hacker ()</span><b>2026</b></div><div><span>Tampilan ESP32 &amp; ESP8266</span><b>2026</b></div></div>
+    <div class="ls rv"><div><span>Website Smarthome</span><b>2026</b></div><div><span>Game Love Bird Loncat</span><b>2026</b></div><div><span>Loading ala Hacker</span><b>2026</b></div><div><span>Tampilan ESP32 &amp; ESP8266</span><b>2026</b></div></div>
   </div>
 </section>
 
@@ -183,7 +198,7 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
   <p class="tag rv">05 / Di Balik Layar</p>
   <h2 class="rv">BUKAN SEKADAR KODE.<br>TAPI CARA <em>BERCERITA.</em></h2>
   <div class="ab">
-    <div class="rv"><h4>Pendidikan</h4><strong></strong><p>.</p><h4>Skill</h4><strong>Web &amp; Game</strong><p>HTML, CSS, JavaScript, animasi, audio.</p><strong>Elektronik &amp; </strong><p>ESP32, ESP8266, tkinter, Bluetooth.</p></div>
+    <div class="rv"><h4>Skill</h4><strong>Web &amp; Game</strong><p>HTML, CSS, JavaScript, animasi, audio.</p><strong>Elektronik &amp; Pemrograman</strong><p>ESP32, ESP8266, tkinter, Bluetooth.</p></div>
     <div class="rv"><h4>Dari ide ke karya</h4><div class="stp"><i>01</i><div><strong>Ide</strong><p style="margin:0">Mulai dari hal yang bikin penasaran.</p></div></div><div class="stp"><i>02</i><div><strong>Rencana</strong><p style="margin:0">Susun logika, tampilan, dan alurnya.</p></div></div><div class="stp"><i>03</i><div><strong>Karya</strong><p style="margin:0">Coba, perbaiki, sampai terasa nyata.</p></div></div></div>
     <div class="q rv"><p>Dari ide dan logika, sampai karya yang hidup.</p><span>— Miko</span></div>
   </div>
@@ -193,7 +208,6 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
   <p class="tag rv">06 / Perjalanan</p>
   <h2 class="rv">LITTLE WINS.<br><em>BIG MEANING.</em></h2>
   <div class="tl" id="tl"><u></u>
-    <div class="rv"><small>2026</small><b></b><p></p></div>
     <div class="rv"><small>2026</small><b>Membangun Website &amp; Game</b><p>Dari halaman hadiah, intro animasi, sampai game loncat.</p></div>
     <div class="rv"><small>2026</small><b>Eksperimen Elektronik</b><p>ESP32 dan ESP8266 dengan layar TFT dan animasi LED.</p></div>
     <div class="rv"><small>SEKARANG</small><b>Terus Berkarya</b><p>Satu proyek baru, satu pelajaran baru.</p></div>
@@ -217,7 +231,7 @@ footer{text-align:center;color:var(--mut);font-size:11px;padding:30px;letter-spa
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-// layar awal + video autoplay berulang
+// layar awal + video
 const v=$('#bgv'),stt=$('#start'),snd=$('#snd');
 $('#go').onclick=()=>{
  stt.classList.add('hide');document.body.classList.remove('lock');
@@ -225,6 +239,12 @@ $('#go').onclick=()=>{
  v.play().then(()=>{snd.textContent='🔊'}).catch(()=>{v.muted=true;v.play().catch(()=>{});snd.textContent='🔇'});
 };
 snd.onclick=()=>{v.muted=!v.muted;snd.textContent=v.muted?'🔇':'🔊'};
+// foto profil JPG: foto.jpg -> foto.jpeg -> foto.JPG -> tersimpan di browser -> siluet bawaan
+const pf=$('#pf'),pfi=$('#pfimg');
+const tries=['foto.jpg','foto.jpeg','foto.JPG'];let ti=0;
+pfi.onload=()=>pf.classList.add('has');
+pfi.onerror=()=>{ti++;if(ti<tries.length){pfi.src=tries[ti]}else{try{const s=localStorage.getItem('miko_pf');if(s){pfi.onerror=null;pfi.src=s}}catch(e){}}};
+pfi.src=tries[0];
 // reveal + counter
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);
  const c=e.target.querySelector('[data-to]');if(c){let n=0,t=+c.dataset.to;const i=setInterval(()=>{c.textContent=++n;if(n>=t)clearInterval(i)},110)}}}),{threshold:.15});
@@ -251,4 +271,4 @@ addEventListener('pointermove',e=>{P.x=e.clientX;P.y=e.clientY;P.t=performance.n
  c.d.style.transform=`translate(${c.x}px,${c.y}px)`});requestAnimationFrame(loop)})(0);
 </script>
 </body>
-</html>
+  </html>
