@@ -97,7 +97,7 @@ h2.det{width:fit-content;max-width:100%}
 .st span{font:400 clamp(28px,5vw,46px) Anton,sans-serif;color:#fff}.st small{display:block;font:400 9px var(--mono);color:#d0d0d0;letter-spacing:2px;margin-top:-4px}
 
 /* ID CARD LANYARD (kanan atas) */
-.lan{position:absolute;top:0;right:calc(4vw - 25px);z-index:4;width:150px;transform-origin:50% 0;scale:.66;animation:sway 4.6s ease-in-out infinite,gx 6s ease-in-out infinite}
+.lan{position:absolute;top:0;right:calc(4vw - 25px);z-index:4;width:150px;transform-origin:50% 0;scale:.66;animation:sway 4.6s ease-in-out infinite,gx 6s ease-in-out infinite;pointer-events:none;user-select:none;-webkit-user-select:none}
 .bob{display:flex;flex-direction:column;align-items:center;animation:gy 3.2s ease-in-out infinite}
 @keyframes sway{0%,100%{rotate:-7deg}50%{rotate:7deg}}
 @keyframes gx{0%,100%{translate:-18px 0}50%{translate:18px 0}}
@@ -105,7 +105,7 @@ h2.det{width:fit-content;max-width:100%}
 .strap{width:16px;height:120px;background:repeating-linear-gradient(135deg,#fff 0 6px,#555 6px 12px);border:1px solid #fff}
 .clip{width:34px;height:14px;background:#ccc;border-radius:3px;border:1px solid #fff}
 .cw{perspective:700px}
-.idc{position:relative;width:150px;height:225px;border-radius:12px;border:1px solid #fff;padding:22px 10px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 0 40px #ffffff33;overflow:hidden;cursor:pointer}
+.idc{position:relative;width:150px;height:225px;border-radius:12px;border:1px solid #fff;padding:22px 10px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:0 0 40px #ffffff33;overflow:hidden}
 .idc::before{content:"";position:absolute;top:8px;left:50%;width:34px;height:6px;margin-left:-17px;border-radius:4px;background:#000;border:1px solid #fff}
 .idc.f0{background:linear-gradient(160deg,#2a2a2a,#050505);color:#fff}
 .idc.f1{background:#fff;color:#000}
@@ -114,7 +114,7 @@ h2.det{width:fit-content;max-width:100%}
 .idc small{font:9px var(--mono);letter-spacing:2px;text-transform:uppercase;opacity:.85}
 .idc .big2{font:400 28px/1 Anton,sans-serif;letter-spacing:1px}
 .idc svg{width:84px;height:84px}
-.idc .ph{width:94px;height:112px;object-fit:cover;border-radius:8px;border:2px solid #fff;background:#333}
+.idc .ph{width:94px;height:112px;object-fit:cover;border-radius:8px;border:2px solid #fff;background:#333;-webkit-user-drag:none}
 .idc.f1 .ph{width:70px;height:84px;border-color:#000}
 @media(min-width:701px){
  #hero{padding-top:110px;align-items:flex-start;text-align:left;padding-right:calc(var(--px) + 210px)}
@@ -215,7 +215,6 @@ footer{text-align:center;color:var(--mut);font:11px var(--mono);padding:30px var
   <button class="btn" id="go">MASUK ▶</button>
 </div>
 <button id="snd" aria-label="Suara">🔊</button>
-<input type="file" id="pfin" accept="image/*" hidden>
 
 <div id="bar"></div>
 <nav>
@@ -228,11 +227,11 @@ footer{text-align:center;color:var(--mut);font:11px var(--mono);padding:30px var
   <div class="bgt">PORTFOLIO</div>
   <div id="dets"></div>
 
-  <!-- ID CARD dengan foto, di kanan atas -->
-  <div class="lan">
+  <!-- ID CARD dengan foto permanen (dari file foto.jpg), di kanan atas -->
+  <div class="lan" aria-hidden="true">
     <div class="bob">
       <div class="strap"></div><div class="clip"></div>
-      <div class="cw"><div class="idc f0" id="idc" title="Ketuk untuk ganti foto"></div></div>
+      <div class="cw"><div class="idc f0" id="idc"></div></div>
     </div>
   </div>
 
@@ -405,7 +404,7 @@ $('#go').onclick=()=>{
 };
 snd.onclick=()=>{v.muted=!v.muted;snd.textContent=v.muted?'🔇':'🔊'};
 
-// ===== ID CARD dengan FOTO =====
+// ===== ID CARD dengan FOTO PERMANEN (hanya dari file foto) =====
 const idc=$('#idc');
 let photo=null;
 function qr(){
@@ -417,9 +416,9 @@ function qr(){
  return s+'</svg>';
 }
 const sil='<svg viewBox="0 0 100 100"><circle cx="50" cy="38" r="20" fill="#555" stroke="#fff"/><path d="M12 100c0-30 18-42 38-42s38 12 38 42Z" fill="#333" stroke="#fff"/></svg>';
-const pic=()=>photo?'<img class="ph" alt="Foto Miko" src="'+photo+'">':sil;
+const pic=()=>photo?'<img class="ph" alt="Foto Miko" draggable="false" src="'+photo+'">':sil;
 const faces=[
- ()=>pic()+'<b>MIKOSAPUTRA</b><small>WATULIMO</small><small>ARTIST DEVELOPER</small>'+(photo?'':'<small style="font-size:8px">KETUK = PILIH FOTO</small>'),
+ ()=>pic()+'<b>MIKOSAPUTRA</b><small>WATULIMO</small><small>ARTIST DEVELOPER</small>',
  ()=>'<small>ID CARD</small>'+pic()+'<div class="big2">DEVELOPER</div><b style="font-size:15px">MIKOSAPUTRA</b>',
  ()=>qr()+'<small>CONNECT</small><b>MIKOSAPUTRA</b><small>WATULIMO</small><small>ARTIST DEVELOPER kw🤣</small>'
 ];
@@ -434,14 +433,11 @@ setInterval(()=>{
  };
 },3000);
 
-// cari foto: foto.jpg / foto.jpeg / foto.png / foto.JPG, lalu foto tersimpan di browser
+// ambil foto dari file: foto.jpg / foto.jpeg / foto.png / foto.JPG
 (function findPhoto(){
  const names=['foto.jpg','foto.jpeg','foto.png','foto.JPG'];let i=0;
  function next(){
-  if(i>=names.length){
-   try{const s=localStorage.getItem('miko_pf');if(s){photo=s;setFace()}}catch(e){}
-   return;
-  }
+  if(i>=names.length)return;
   const im=new Image();
   im.onload=()=>{photo=names[i];setFace()};
   im.onerror=()=>{i++;next()};
@@ -449,27 +445,6 @@ setInterval(()=>{
  }
  next();
 })();
-
-// ketuk ID card untuk pilih / ganti foto
-const pfin=$('#pfin');
-idc.addEventListener('click',()=>pfin.click());
-pfin.addEventListener('change',()=>{
- const f=pfin.files[0];if(!f)return;
- const rd=new FileReader();
- rd.onload=()=>{
-  const im=new Image();
-  im.onload=()=>{
-   const m=360,k=Math.min(1,m/Math.max(im.width,im.height));
-   const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
-   c.getContext('2d').drawImage(im,0,0,c.width,c.height);
-   photo=c.toDataURL('image/jpeg',.85);
-   try{localStorage.setItem('miko_pf',photo)}catch(e){}
-   setFace();toast('FOTO ID CARD DIPERBARUI');
-  };
-  im.src=rd.result;
- };
- rd.readAsDataURL(f);
-});
 
 // tombol Spotify: tampilkan pesan "masih dalam proses"
 $$('.sp').forEach(a=>a.addEventListener('click',e=>{
@@ -527,4 +502,4 @@ addEventListener('pointermove',e=>{P.x=e.clientX;P.y=e.clientY;P.t=performance.n
  c.d.style.transform=`translate(${c.x}px,${c.y}px)`});requestAnimationFrame(loop)})(0);
 </script>
 </body>
-                      </html>
+     </html>
