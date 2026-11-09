@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#000;color:#fff;font-family:sans-serif}
+  #feed{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory}
+  .slot{height:100vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;
+        align-items:center;justify-content:center;background:#000;position:relative}
+  .slot iframe{width:100%;max-width:420px;height:100vh;border:0;background:#000}
+  .wait{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+        font-size:13px;letter-spacing:2px;opacity:.6;z-index:1}
+  .fail{position:absolute;inset:0;display:none;flex-direction:column;
+        align-items:center;justify-content:center;gap:12px;text-align:center;
+        padding:20px;z-index:4;font-size:14px;background:#000}
+  .fail a,.fail button{background:#fff;color:#000;padding:12px 22px;border-radius:30px;
+        font-weight:bold;text-decoration:none;border:0;font-size:14px}
+  .fail a{background:#333;color:#fff}
+
+  /* ---------- Loading ---------- */
+  #load{position:fixed;inset:0;z-index:40;background:#000;display:flex;
+        flex-direction:column;align-items:center;justify-content:center;
+        padding:20px;text-align:center;transition:opacity .7s,visibility .7s}
+  #load.hide{opacity:0;visibility:hidden}
+  .logo{position:relative;width:110px;height:110px;margin-bottom:28px}
+  .logo .r1,.logo .r2{position:absolute;inset:0;border-radius:50%}
+  .logo .r1{border:4px solid #fff;border-top-color:transparent;
+        animation:spin 1s linear infinite}
+  .logo .r2{inset:12px;border:3px dashed #888;border-bottom-color:transparent;
+        animation:spin 1.8s linear infinite reverse}
+  .logo b{position:absolute;inset:0;display:flex;align-items:center;
+        justify-content:center;font-size:44px;font-weight:900;color:#fff;
+        animation:pulse 1.4s ease-in-out infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes pulse{50%{transform:scale(1.15);text-shadow:0 0 18px #fff}}
+  .sel{font-size:clamp(22px,7vw,34px);font-weight:800;letter-spacing:6px;color:#fff;
+        animation:fade .8s both}
+  .big{font-size:clamp(46px,15vw,84px);font-weight:900;letter-spacing:3px;
+        line-height:1.05;color:#fff;margin-top:6px;
+        text-shadow:0 0 22px rgba(255,255,255,.55);
+        animation:fade .8s .3s both, glow 2s 1s ease-in-out infinite}
+  @keyframes glow{50%{text-shadow:0 0 40px #fff,0 0 8px #fff}}
+  .bar{width:min(300px,70vw);height:4px;background:#333;margin-top:30px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:#fff}
+  #pct{margin-top:10px;font-size:13px;letter-spacing:3px;color:#fff;opacity:.8}
+
+  /* Judul tiap video */
+  .cap{position:absolute;top:0;left:0;right:90px;z-index:5;padding:16px 16px 40px;
+        pointer-events:none;background:linear-gradient(#000c,transparent)}
+  .cap b{display:block;font-size:18px;letter-spacing:1px}
+  .cap span{display:block;font-size:12px;opacity:.7;margin-top:2px}
+  .cap i{font-style:normal;font-size:11px;background:#fff;color:#000;
+        padding:2px 7px;margin-right:8px;font-weight:900}
+
+  /* ---------- Halaman Peringatan ---------- */
+  #warn{position:fixed;inset:0;z-index:30;background:#000;display:flex;
+        align-items:center;justify-content:center;padding:22px;overflow:hidden;
+        transition:opacity .6s,visibility .6s}
+  #warn.hide{opacity:0;visibility:hidden}
+  #warn:not(.go) .box,#warn:not(.go) .box *{animation-play-state:paused}
+  #warn::before{content:"";position:absolute;inset:0;pointer-events:none;
+        background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px);
+        animation:scan 6s linear infinite}
+  #warn::after{content:"";position:absolute;inset:0;pointer-events:none;
+        background:radial-gradient(circle at center,transparent 40%,#000 100%)}
+  @keyframes scan{from{background-position:0 0}to{background-position:0 100px}}
+  .box{position:relative;z-index:2;width:100%;max-width:380px;text-align:center;
+        border:2px solid #fff;padding:30px 22px;background:#000;
+        box-shadow:8px 8px 0 #fff;animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+  @keyframes pop{from{transform:scale(.7) rotate(-3deg);opacity:0}to{transform:none;opacity:1}}
+  .tri{width:84px;height:84px;margin:0 auto 14px;animation:shake 2.2s infinite}
+  @keyframes shake{0%,86%,100%{transform:none}88%{transform:rotate(-8deg)}
+        92%{transform:rotate(8deg)}96%{transform:rotate(-5deg)}}
+  h1{font-size:34px;letter-spacing:8px;font-weight:900;margin-bottom:6px;animation:glitch 3s infinite}
+  @keyframes glitch{0%,90%,100%{text-shadow:none;transform:none}
+        92%{text-shadow:3px 0 #fff,-3px 0 #777;transform:translateX(2px)}
+        94%{text-shadow:-3px 0 #fff,3px 0 #777;transform:translateX(-2px)}
+        96%{text-shadow:none;transform:none}}
+  .line{height:2px;background:#fff;margin:14px auto;width:0;animation:grow 1s .5s forwards}
+  @keyframes grow{to{width:100%}}
+  .txt{font-size:15px;line-height:1.7;opacity:0;animation:fade .8s 1s forwards}
+  .txt b{background:#fff;color:#000;padding:1px 6px}
+  .sorry{margin-top:14px;font-size:13px;opacity:0;font-style:italic;color:#bbb;
+        animation:fade .8s 1.6s forwards}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  #ok{margin-top:22px;width:100%;padding:15px;border:2px solid #fff;background:#fff;
+        color:#000;font-size:15px;font-weight:900;letter-spacing:2px;cursor:pointer;
+        opacity:0;animation:fade .8s 2s forwards;transition:.2s}
+  #ok:active{background:#000;color:#fff;transform:scale(.97)}
+
+  /* ---------- Tombol suara ---------- */
+  #snd{position:fixed;top:14px;right:14px;z-index:15;border:0;color:#fff;
+        background:#fe2c55;padding:12px 18px;border-radius:30px;font-size:15px;
+        font-weight:bold;box-shadow:0 4px 14px rgba(0,0,0,.6)}
+  #snd.on{background:#1db954}
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="load">
+  <div class="logo"><div class="r1"></div><div class="r2"></div><b>M</b></div>
+  <div class="sel">SELAMAT DI</div>
+  <div class="big"></div>
+  <div class="bar"><i id="barfill"></i></div>
+  <div id="pct">0%</div>
+</div>
+
+<!-- Peringatan -->
+<div id="warn">
+  <div class="box">
+    <svg class="tri" viewBox="0 0 100 100" fill="none" stroke="#fff" stroke-width="5"
+         stroke-linejoin="round">
+      <path d="M50 8 L94 88 H6 Z"/>
+      <path d="M50 38 V62" stroke-linecap="round"/>
+      <circle cx="50" cy="75" r="2.5" fill="#fff"/>
+    </svg>
+    <h1>PERINGATAN</h1>
+    <div class="line"></div>
+    <p class="txt">
+      Seluruh video di dalam halaman ini adalah
+      <b>hasil salinan dari TikTok</b>.
+      di dalam vidio tidak ada unsur menyinggung ke siapapun dan website saya sudah aman karena pake sistem hosting github yang terpercaya
+    </p>
+    <p class="sorry">Mohon maaf jika ada kesalahan dalam penggunaan kata-kata.</p>
+    <button id="ok">SAYA MENGERTI — LANJUT</button>
+  </div>
+</div>
+
+<button id="snd">🔇 Suara mati — ketuk di sini</button>
+<div id="feed"></div>
+
+<script>
+/* ===== DAFTAR LINK VIDEO — tambah link baru di sini ===== */
+/* Link panjang (.../video/angka) langsung jalan. Link pendek dicoba otomatis. */
+const LINKS = [
+  "https://www.tiktok.com/@02.93.hs/video/7702776331116858676",
+  "https://www.tiktok.com/@srhuayra/video/7705292741604805906",
+  "https://www.tiktok.com/@saptxc._/video/7705416901601676565",
+  "https://www.tiktok.com/@molang/video/7686057869065686294",
+  "https://www.tiktok.com/@fazrilukmann/video/7682003487907040519",
+  "https://www.tiktok.com/@rendraw.1/video/7451552442350636294",
+  "https://www.tiktok.com/@zon.art0/video/7695587154403085575",
+  "https://www.tiktok.com/@yanzz_557/video/7486547066676661512",
+  "https://www.tiktok.com/@dndr.putra/video/7646620203148659984",
+  "https://www.tiktok.com/@pawbxj.exe/video/7659403900029619477",
+  "https://www.tiktok.com/@ridhosaputs/video/7357720212231294214",
+  "https://www.tiktok.com/@rezayuansyahputra/video/7459671304057228549",
+  "https://www.tiktok.com/@lukman.juventino/video/7472169011166334213",
+  "https://www.tiktok.com/@jokiit.com/video/7644033365921762581",
+  "https://www.tiktok.com/@shiraaa_3s/video/7389435494062361862",
+  "https://www.tiktok.com/@dji_santosoe/video/7691453604334472455",
+  "https://www.tiktok.com/@rianboyke._/video/7696529105914727700",
+  "https://www.tiktok.com/@riyy_musik/video/7694259190159658261",
+  "https://www.tiktok.com/@kinnnaja24/video/7696557432255958292",
+  "https://www.tiktok.com/@bad_drums/video/7683191736213966112",
+  "https://www.tiktok.com/@feellonely1/video/7438798025029405970",
+  "https://www.tiktok.com/@0landrys.mp3/video/7705387839705337094",
+  "https://www.tiktok.com/@meliempruy/video/7674539975085411604",
+  "https://www.tiktok.com/@dcexposures/video/7699674675693047054",
+  "https://www.tiktok.com/@drleonkessel/video/7705472123174718752",
+  "https://www.tiktok.com/@masagteteggg/video/7546550745827478840",
+  "https://www.tiktok.com/@aqil_.zx/video/7686436078399556882",
+  /* 6 link di bawah ini belum diubah jadi ID */
+  "https://vt.tiktok.com/ZSpDRndfR/",
+  "https://vt.tiktok.com/ZSpDREmSD/",
+  "https://vt.tiktok.com/ZSpDRGaE8/",
+  "https://vt.tiktok.com/ZSpDRmWxQ/",
+  "https://vt.tiktok.com/ZSpDRuBtM/",
+  "https://vt.tiktok.com/ZSpDRBBPA/",
+];
+
+const feed = document.getElementById("feed");
+const snd  = document.getElementById("snd");
+let started = false, soundOn = false, cur = -1;
+const slots = [];
+
+/* ----- Loading ----- */
+(function(){
+  const load = document.getElementById("load");
+  const fill = document.getElementById("barfill");
+  const pct  = document.getElementById("pct");
+  const warn = document.getElementById("warn");
+  let p = 0;
+  const t = setInterval(() => {
+    p = Math.min(100, p + 1 + Math.random() * 3);
+    fill.style.width = p + "%";
+    pct.textContent = Math.floor(p) + "%";
+    if (p >= 100){
+      clearInterval(t);
+      setTimeout(() => {
+        load.classList.add("hide");
+        warn.classList.add("go");
+        setTimeout(() => load.remove(), 800);
+      }, 350);
+    }
+  }, 60);
+})();
+
+/* ----- bangun semua slot ----- */
+function parseId(u){ const m = u.match(/video\/(\d+)/); return m ? m[1] : null; }
+function parseUser(u){ const m = u.match(/@([^\/?]+)\/video/); return m ? "TikTok @" + m[1] : "TikTok"; }
+
+LINKS.forEach((url, i) => {
+  const el = document.createElement("div");
+  el.className = "slot";
+  el.innerHTML =
+    '<div class="cap"><b><i>' + (i+1) + '/' + LINKS.length + '</i>Video ' + (i+1) +
+    '</b><span></span></div>' +
+    '<div class="wait">MEMUAT…</div>' +
+    '<div class="fail"><div>Video ini belum bisa dimuat.</div>' +
+    '<button class="retry">🔄 Coba lagi</button>' +
+    '<a href="' + url + '" target="_blank" rel="noopener">Buka di TikTok</a></div>';
+  const s = { url, el, idx:i, id:parseId(url), by:parseUser(url),
+              iframe:null, ready:false, pending:null, failed:false, retry:0 };
+  el.querySelector(".cap span").textContent = s.by;
+  el.querySelector(".retry").addEventListener("click", () => {
+    s.failed = false; s.pending = null;
+    el.querySelector(".fail").style.display = "none";
+    el.querySelector(".wait").style.display = "flex";
+    ensure(s);
+  });
+  feed.appendChild(el);
+  slots.push(s);
+});
+
+function setCap(s){ s.el.querySelector(".cap span").textContent = s.by; }
+function showFail(s){
+  s.failed = true;
+  s.el.querySelector(".wait").style.display = "none";
+  s.el.querySelector(".fail").style.display = "flex";
+}
+
+/* ----- link pendek: coba ubah jadi ID (cadangan) ----- */
+const ENDPOINTS = [
+  u => "https://www.tiktok.com/oembed?url=" + encodeURIComponent(u),
+  u => "https://api.allorigins.win/raw?url=" +
+       encodeURIComponent("https://www.tiktok.com/oembed?url=" + encodeURIComponent(u)),
+  u => "https://corsproxy.io/?" +
+       encodeURIComponent("https://www.tiktok.com/oembed?url=" + encodeURIComponent(u)),
+];
+
+async function fetchOembed(url){
+  for (const mk of ENDPOINTS){
+    try{
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), 9000);
+      const r = await fetch(mk(url), { signal: ctrl.signal });
+      clearTimeout(t);
+      if (!r.ok) continue;
+      const j = await r.json();
+      if (j && j.html) return j;
+    }catch(e){}
+  }
+  return null;
+}
+
+function resolve(s){
+  if (s.id) return Promise.resolve(s.id);
+  try{
+    const c = localStorage.getItem("ttid:" + s.url);
+    if (c && /^\d+$/.test(c)){ s.id = c; return Promise.resolve(c); }
+  }catch(e){}
+  if (s.failed) return Promise.resolve(null);
+  if (!s.pending){
+    s.pending = fetchOembed(s.url).then(j => {
+      if (!j) throw new Error("gagal");
+      const h = String(j.html);
+      const m = h.match(/data-video-id="(\d+)"/) || h.match(/video\/(\d+)/);
+      if (!m) throw new Error("no id");
+      s.id = m[1];
+      if (j.author_unique_id) s.by = "TikTok @" + String(j.author_unique_id).replace(/[<>]/g, "");
+      setCap(s);
+      try{ localStorage.setItem("ttid:" + s.url, s.id); }catch(e){}
+      return s.id;
+    }).catch(() => { s.pending = null; showFail(s); return null; });
+  }
+  return s.pending;
+}
+
+/* ----- pemutar TikTok ----- */
+function makeIframe(s, autoplay){
+  const f = document.createElement("iframe");
+  f.src = "https://www.tiktok.com/player/v1/" + s.id +
+    "?autoplay=" + (autoplay ? 1 : 0) +
+    "&loop=1&controls=1&description=0&music_info=0&rel=0&volume_control=1";
+  f.allow = "autoplay; fullscreen; encrypted-media";
+  s.el.appendChild(f);
+  s.iframe = f;
+  s.ready = false;
+  s.retry = 0;
+  s.el.querySelector(".wait").style.display = "none";
+}
+function tt(f, type){
+  if (f && f.contentWindow)
+    f.contentWindow.postMessage({"x-tiktok-player":true, type:type, value:undefined}, "*");
+}
+
+window.addEventListener("message", e => {
+  const d = e.data;
+  if (!d || !d["x-tiktok-player"]) return;
+  const s = slots.find(x => x.iframe && x.iframe.contentWindow === e.source);
+  if (!s) return;
+  if (d.type === "onPlayerReady"){
+    s.ready = true;
+    if (s.idx === cur){
+      if (soundOn) tt(s.iframe, "unMute");
+      tt(s.iframe, "play");
+    }
+  }
+  // Suara permanen: kalau pemutar membisu lagi, nyalakan kembali
+  if (d.type === "onMute" && d.value === true && soundOn && s.idx === cur && s.retry < 3){
+    s.retry++;
+    tt(s.iframe, "unMute");
+  }
+});
+
+/* ----- suara: sekali aktif = aktif terus ----- */
+function setSoundOn(){
+  soundOn = true;
+  snd.classList.add("on");
+  snd.textContent = "🔊 Suara menyala (tetap)";
+}
+
+/* ----- putar otomatis video yang sedang tampil ----- */
+function ensure(s){
+  if (s.iframe || s.failed) return;
+  resolve(s).then(id => {
+    if (!id || s.iframe) return;
+    if (Math.abs(s.idx - cur) > 1) return;   // sudah bergeser jauh
+    makeIframe(s, s.idx === cur);
+  });
+}
+
+function activate(i){
+  cur = i;
+  slots.forEach((s, j) => {
+    const near = Math.abs(j - i) <= 1;
+    if (!near && s.iframe){
+      s.iframe.remove(); s.iframe = null; s.ready = false;
+      s.el.querySelector(".wait").style.display = "flex";
+    }
+    if (near) ensure(s);
+    if (j >= i && j <= i + 2) resolve(s);
+    if (s.iframe){
+      if (j === i){
+        if (s.ready){
+          if (soundOn) tt(s.iframe, "unMute");
+          tt(s.iframe, "play");
+        }
+      } else {
+        tt(s.iframe, "pause");
+      }
+    }
+  });
+}
+
+let timer;
+feed.addEventListener("scroll", () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    const i = Math.round(feed.scrollTop / window.innerHeight);
+    if (started && i !== cur) activate(i);
+  }, 80);
+});
+
+/* ----- tombol suara: hanya menyalakan / menyalakan ulang ----- */
+snd.addEventListener("click", () => {
+  setSoundOn();
+  const s = slots[cur];
+  if (s && s.iframe){ s.retry = 0; tt(s.iframe, "unMute"); tt(s.iframe, "play"); }
+});
+
+/* ----- tombol "Saya mengerti" = ketukan pertama, suara langsung aktif ----- */
+document.getElementById("ok").addEventListener("click", () => {
+  started = true;
+  setSoundOn();
+  const w = document.getElementById("warn");
+  w.classList.add("hide");
+  setTimeout(() => w.remove(), 700);
+  activate(Math.round(feed.scrollTop / window.innerHeight));
+});
+</script>
+</body>
+</html>
